@@ -1,0 +1,35 @@
+{
+  "name": "harvest2freshbooks",
+  "version": "1.0.0",
+  "description": "Convert Harvest timesheets to Freshbook Invoices",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/backupbrain/timesheet-to-invoice.git"
+  },
+  "keywords": [
+    "timesheet",
+    "invoice"
+  ],
+  "author": "backupbrain@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/backupbrain/timesheet-to-invoice/issues"
+  },
+  "homepage": "https://github.com/backupbrain/timesheet-to-invoice#readme",
+  "dependencies": {
+    "@prisma/client": "^4.3.1",
+    "dotenv": "^16.0.2",
+    "node-fetch": "^2.6.7",
+    "typescript": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.18",
+    "@types/node-fetch": "^2.6.2",
+    "prisma": "^4.3.1"
+  }
+}
