@@ -7,19 +7,12 @@ import {
   User as PrismaUser,
   UserAssignment as PrismaUserAssignment,
 } from "@prisma/client";
-import { getAllTimeEntries } from "./apis/harvest/getAllTimeEntries";
-import { getHarvestJob } from "./apis/harvest/getHarvestJob";
-import { harvestDataToLocalData } from "./apis/harvest/types";
-import { prisma } from "./database/client";
+import { getAllTimeEntries } from "../apis/harvest/getAllTimeEntries";
+import { getHarvestJob } from "../apis/harvest/getHarvestJob";
+import { harvestDataToLocalData } from "../apis/harvest/types";
+import { prisma } from "../database/client";
 
-// const startPage = 1;
-// const numPagesToDownload = 3;
-// getAllTimeEntries({ startPage, numPagesToDownload }).then((response) => {
-//   console.log(response.timeEntries.length);
-//   console.log(response.page);
-// });
-
-const runJob = async () => {
+export const getDataFromHarvest = async () => {
   const harvestJob = await getHarvestJob();
   const startPage = harvestJob.lastPageDownloaded + 1;
   const numPagesToDownload = 100;
@@ -194,7 +187,3 @@ const runJob = async () => {
     data: { lastPageDownloaded: timesheetData.page },
   });
 };
-
-runJob().then(() => {
-  console.log("done");
-});
