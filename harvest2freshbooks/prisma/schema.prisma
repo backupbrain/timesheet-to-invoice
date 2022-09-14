@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model HarvestJob {
+  id                 String @id @default(uuid())
+  lastPageDownloaded Int    @default(0)
+}
+
+model Client {
+  id        String     @id @default(uuid())
+  harvestId Int        @unique
+  name      String
+  currency  String
+  projects  Project[]
+  taskTimes TaskTime[]
+}
+
+model Project {
+  id        String     @id @default(uuid())
+  harvestId Int        @unique
+  name      String
+  client    Client?    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId  String?
+  taskTimes TaskTime[]
+  tasks     Task[]
+}
+
+model Task {
+  id        String     @id @default(uuid())
+  harvestId Int        @unique
+  name      String
+  project   Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String?
+  taskTimes TaskTime[]
+}
+
+model User {
+  id        String     @id @default(uuid())
+  harvestId Int        @unique
+  name      String
+  taskTimes TaskTime[]
+}
+
+model UserAssignment {
+  id               String     @id @default(uuid())
+  harvestId        Int        @unique
+  isProjectManager Boolean    @default(false)
+  isActive         Boolean    @default(false)
+  useDefaultRates  Boolean    @default(false)
+  budget           Int?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  taskTimes        TaskTime[]
+}
+
+model TaskAssignment {
+  id         String     @id @default(uuid())
+  harvestId  Int        @unique
+  billable   Boolean    @default(false)
+  isActive   Boolean    @default(false)
+  hourlyRate Int?
+  budget     Int?
+  taskTimes  TaskTime[]
+}
+
+model TaskTime {
+  id                String          @id @default(uuid())
+  harvestId         Int             @unique
+  spentDate         String // yyyy-mm-dd
+  hours             Float
+  hoursWithoutTimer Float
+  roundedHours      Float
+  notes             String?
+  lockedReason      String?
+  isClosed          Boolean         @default(false)
+  isBilled          Boolean         @default(false)
+  timerStartedAt    DateTime?
+  startedTime       String? // HH:MMampm
+  endedTime         String? // HH:MMampm
+  isRunning         Boolean         @default(false)
+  billable          Boolean         @default(true)
+  budgeted          Boolean         @default(false)
+  billableRate      Int?
+  costRate          Int?
+  invoice           String?
+  externalReference String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  project           Project?        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId         String?
+  user              User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?
+  client            Client?         @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId          String?
+  task              Task?           @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId            String?
+  userAssignment    UserAssignment? @relation(fields: [userAssignmentId], references: [id], onDelete: Cascade)
+  userAssignmentId  String?
+  taskAssignment    TaskAssignment? @relation(fields: [taskAssignmentId], references: [id], onDelete: Cascade)
+  taskAssignmentId  String?
+}
