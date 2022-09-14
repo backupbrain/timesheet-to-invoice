@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 const app = express();
 const port = 9991;
-// app.use(express.json());
+app.use(express.bodyParser());
 
 app.get("/api/1.0/oauth", (req: Request, res: Response) => {
   console.log(req.params);
