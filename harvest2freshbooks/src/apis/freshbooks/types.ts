@@ -18,5 +18,5 @@ export type InvoiceLine = {
   compounded_tax: boolean;
   type: string | null;
   unit_cost: InvoiceLineAmount;
-  invoiceId: string | null;
+  invoiceid: string | null;
 };
