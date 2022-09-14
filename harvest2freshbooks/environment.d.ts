@@ -3,6 +3,8 @@ declare global {
     interface ProcessEnv {
       HARVEST_ACCESS_TOKEN: string;
       HARVEST_ACCOUNT_ID: string;
+      FRESHBOOKS_CLIENT_ID: string;
+      FRESHBOOKS_CLIENT_SECRET: string;
     }
   }
 }
