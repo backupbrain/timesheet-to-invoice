@@ -1,6 +1,7 @@
 import { Client, Project, Task } from "@prisma/client";
 import { InvoiceLine } from "src/apis/freshbooks/types";
 import { prisma } from "src/database/client";
+import { getInvoiceDateRanges } from "src/utils/getInvoiceDateRanges";
 
 export type Props = {
   userName: string;
@@ -54,14 +55,22 @@ export const buildInvoiceListItems = async ({ userName,invoiceNumber }: Props) =
   });
   const currentDate = new Date();
   const invoices: any[] = [];
-  const invoice: { [key: string]: any } = { lines: [] };
+  let invoice: { [key: string]: any } = { lines: [] };
+  const invoiceRanges = getInvoiceDateRanges({ startDate: new Date(taskTimes[0].spentDate), endDate: new Date(taskTimes[taskTimes.length - 1].spentDate), interval: "biweekly"})
+  let currentRangeIndex = 0;
+  let currentRange = invoiceRanges[currentRangeIndex];
   for (let taskTime of taskTimes) {
     // TODO: Get billable rate for each task.
     // might be in project or task
     const spentDate = new Date(taskTime.spentDate);
     // if spendDate is the last day of month and today is after
-    // invoices.push(invoice);
-    // create new invoice, save in Prisma
+    if (spentDate >= currentRange.endDate) {
+        // save invoice in prisma
+        invoices.push(invoice);
+        invoice = { lines: [] };
+        currentRangeIndex += 1;
+        currentRange = invoiceRanges[currentRangeIndex]
+    }
     const invoiceLine: InvoiceLine = {
         modern_project_id: taskTime.task?.project?.freshbooksId;
         retainer_id: null,
@@ -86,8 +95,10 @@ export const buildInvoiceListItems = async ({ userName,invoiceNumber }: Props) =
 
   const lastInvoiceLine = invoice.lines[invoice.lines.length - 1];
   const spentDate = new Date(lastInvoiceLine.spentDate);
-  // if spendDate is the last day of month and today is after
-  // invoices.push(invoice);
+  if (spentDate >= currentRange.endDate) {
+    // save invoice in prisma
+    invoices.push(invoice);
+  }
 
 
 

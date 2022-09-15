@@ -25,13 +25,14 @@ model Client {
 }
 
 model Project {
-  id        String     @id @default(uuid())
-  harvestId Int        @unique
-  name      String
-  client    Client?    @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  clientId  String?
-  taskTimes TaskTime[]
-  tasks     Task[]
+  id           String     @id @default(uuid())
+  harvestId    Int        @unique
+  freshbooksId Int?       @unique
+  name         String
+  client       Client?    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId     String?
+  taskTimes    TaskTime[]
+  tasks        Task[]
 }
 
 model Task {

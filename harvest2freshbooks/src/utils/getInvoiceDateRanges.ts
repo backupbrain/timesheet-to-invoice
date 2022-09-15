@@ -1,12 +1,17 @@
 export type Props = {
   startDate: Date;
   endDate: Date;
+  interval: "monthly" | "biweekly";
 };
 export type DateRange = {
   startDate: Date;
   endDate: Date;
 };
-const getInvoiceDateRanges = ({ startDate, endDate }: Props): DateRange[] => {
+export const getInvoiceDateRanges = ({
+  startDate,
+  endDate,
+  interval,
+}: Props): DateRange[] => {
   if (endDate < startDate) {
     throw new Error("endDate cannot be before startDate");
   }
@@ -40,7 +45,13 @@ const getInvoiceDateRanges = ({ startDate, endDate }: Props): DateRange[] => {
       0
     );
     const visitedDay = visitedDate.getDay();
-    if (visitedDay === lastDayOfMonth.getDay() || visitedDate.getDay() == 15) {
+    if (visitedDay === lastDayOfMonth.getDay()) {
+      currentRange.endDate = visitedDate;
+      dateRanges.push(currentRange);
+      isStarting = true;
+      continue;
+    }
+    if (interval === "biweekly" && visitedDate.getDay() == 15) {
       currentRange.endDate = visitedDate;
       dateRanges.push(currentRange);
       isStarting = true;
