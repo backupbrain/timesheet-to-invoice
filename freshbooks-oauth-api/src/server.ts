@@ -6,7 +6,12 @@ const port = 9991;
 app.use(express.json());
 
 app.options("/", (req: Request, res: Response) => {
-  res.status(204).setHeader("Allow", "OPTIONS, GET, HEAD, POST").send("");
+  res
+    .status(405)
+    .setHeader("Allow", "OPTIONS, GET, HEAD, POST")
+    .setHeader("Content-Length", "0")
+    .setHeader("Access-Control-Allow-Origin:", "*")
+    .send("");
 });
 
 app.head("/", (req: Request, res: Response) => {
@@ -14,7 +19,12 @@ app.head("/", (req: Request, res: Response) => {
 });
 
 app.options("/api/1.0/oauth", (req: Request, res: Response) => {
-  res.status(204).setHeader("Allow", "OPTIONS, GET, HEAD, POST").send("");
+  res
+    .status(405)
+    .setHeader("Allow", "OPTIONS, GET, HEAD, POST")
+    .setHeader("Content-Length", "0")
+    .setHeader("Access-Control-Allow-Origin:", "*")
+    .send("");
 });
 
 app.head("/api/1.0/oauth", (req: Request, res: Response) => {
