@@ -4,7 +4,7 @@
   "description": "Convert Harvest timesheets to Freshbook Invoices",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "ts-node src/index.ts",
+    "harvest": "ts-node src/scrapeHarvest.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
