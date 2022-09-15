@@ -23,7 +23,7 @@ app.options("/api/1.0/oauth", (req: Request, res: Response) => {
     .status(405)
     .setHeader("Allow", "OPTIONS, GET, HEAD, POST")
     .setHeader("Content-Length", "0")
-    .setHeader("Access-Control-Allow-Origin:", "*")
+    .setHeader("Access-Control-Allow-Origin", "*")
     .send("");
 });
 
