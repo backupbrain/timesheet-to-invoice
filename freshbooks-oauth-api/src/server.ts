@@ -5,6 +5,22 @@ const app = express();
 const port = 9991;
 app.use(express.json());
 
+app.options("/", (req: Request, res: Response) => {
+  res.status(204).setHeader("Allow", "OPTIONS, GET, HEAD, POST").send("");
+});
+
+app.head("/", (req: Request, res: Response) => {
+  res.send("");
+});
+
+app.options("/api/1.0/oauth", (req: Request, res: Response) => {
+  res.status(204).setHeader("Allow", "OPTIONS, GET, HEAD, POST").send("");
+});
+
+app.head("/api/1.0/oauth", (req: Request, res: Response) => {
+  res.send("");
+});
+
 app.get("/api/1.0/oauth", async (req: Request, res: Response) => {
   res.send("OK");
   console.log(req.params);
