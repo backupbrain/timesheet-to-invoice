@@ -16,12 +16,27 @@ model HarvestJob {
 }
 
 model Client {
-  id        String     @id @default(uuid())
-  harvestId Int        @unique
-  name      String
-  currency  String
-  projects  Project[]
-  taskTimes TaskTime[]
+  id             String     @id @default(uuid())
+  harvestId      Int        @unique
+  freshbooksId   Int?       @unique
+  addressId      String?
+  name           String
+  freshbooksName String?
+  currency       String
+  projects       Project[]
+  taskTimes      TaskTime[]
+  address        Address?   @relation(fields: [addressId], references: [id], onDelete: SetNull)
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  street     String?
+  street2    String?
+  ordinance  String?
+  region     String?
+  postalCode String?
+  country    String
+  clients    Client[]
 }
 
 model Project {
