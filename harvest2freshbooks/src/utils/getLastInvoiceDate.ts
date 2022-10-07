@@ -1,4 +1,4 @@
-import { Invoice } from "src/types/freshbooks/Invoice";
+import { Invoice } from "../apis/freshbooks/types";
 
 export type Props = {
   invoices: Invoice[];

@@ -1,26 +1,26 @@
-import {
-  Address,
-  Client,
-  Task,
-  TaskAssignment,
-  TaskTime,
-} from "@prisma/client";
+import { Task, TaskAssignment, TaskTime } from "@prisma/client";
 import "dotenv/config";
-import { InvoiceLineAmount } from "./types";
+import { fetchFromFreshbooks } from "./fetchFromFreshbooks";
+import {
+  ClientWithAddress,
+  InvoiceLineAmount,
+  TaskTypeWithTaskAndTaskAssignment,
+} from "./types";
 
+export const defaultBillableRate = 65.0;
 export type InvoiceLine = {
   type: number;
   expenseid?: number | undefined;
   qty: number;
   unit_cost: InvoiceLineAmount;
-  amount: string;
+  amount: InvoiceLineAmount;
   code: string;
   description: string;
   name: string;
-  taxName1: string;
-  taxAmount1: string;
-  taxName2: string;
-  taxAmount2: string;
+  taxName1?: string;
+  taxAmount1?: number;
+  taxName2?: string;
+  taxAmount2?: number;
 };
 export type CreateInvoiceLineProps = {
   taskTime: TaskTime & {
@@ -30,41 +30,40 @@ export type CreateInvoiceLineProps = {
   currency: "USD" | "EUR";
 };
 const createInvoiceLine = ({ taskTime, currency }: CreateInvoiceLineProps) => {
-  const unitCost =
-    taskTime.billableRate || taskTime.taskAssignment?.hourlyRate || 0;
+  let unitCost = defaultBillableRate;
+  // if (taskTime.taskAssignment?.hourlyRate) {
+  //   unitCost = taskTime.taskAssignment.hourlyRate;
+  // }
+  // if (taskTime.billableRate) {
+  //   unitCost = taskTime.billableRate;
+  // }
   const invoiceLine: InvoiceLine = {
     type: 0, // 0 = normal, 1 = rebilling
     qty: taskTime.roundedHours,
     unit_cost: {
-      amount: unitCost.toLocaleString("en-US", {
-        style: "currency",
-        currency,
-      }),
+      amount: unitCost,
       code: currency,
     },
-    amount: (unitCost * taskTime.roundedHours).toLocaleString("en-US", {
-      style: "currency",
-      currency,
-    }),
+    amount: {
+      amount: unitCost * taskTime.roundedHours,
+      code: currency,
+    },
     code: currency,
     description: taskTime.notes || "Not provided",
     name: taskTime.task?.name || "Programming",
-    taxName1: "Tax",
-    taxAmount1: "0.00",
-    taxName2: "Tax",
-    taxAmount2: "0.00",
+    // taxName1: "Tax",
+    // taxAmount1: 0.0,
+    // taxName2: "Tax",
+    // taxAmount2: 0.0,
   };
   return invoiceLine;
 };
 
 export type Props = {
-  client: Client & { address: Address | null };
+  client: ClientWithAddress;
   invoiceNumber: string;
   createDate: Date;
-  taskTimes: (TaskTime & {
-    taskAssignment: TaskAssignment | null;
-    task: Task | null;
-  })[];
+  taskTimes: TaskTypeWithTaskAndTaskAssignment[];
   accessToken: string;
 };
 export const createInvoice = async ({
@@ -86,7 +85,10 @@ export const createInvoice = async ({
       })
     );
   }
-
+  let description = "";
+  if (invoiceLines.length > 0) {
+    description = invoiceLines[invoiceLines.length - 1].description;
+  }
   const endpoint = `/accounting/account/${process.env.FRESHBOOKS_ACCOUNT_ID}/invoices/invoices`;
   const data = {
     invoice: {
@@ -107,10 +109,10 @@ export const createInvoice = async ({
       discount_value: 0, // discount percent across the invoice
       fname: "",
       lname: "",
-      notes: "Enter notes or Bank transfer details",
+      notes: "",
       invoice_number: invoiceNumber,
       status: 1, // 1: draft, 2: sent, 3: viewed, 4: paid, 5: auto-paid, 6: retry, 7: failed, 8: partial,
-      organization: client.name,
+      organization: client.freshbooksName || client.name,
       code: client.address?.postalCode || "",
       po_number: null,
       province: client.address?.region || "",
@@ -176,11 +178,13 @@ export const createInvoice = async ({
       customerid: client.freshbooksId,
     },
   };
-  // const response = await fetchFromFreshbooks({
-  //   endpoint,
-  //   accessToken,
-  //   method: "POST",
-  //   data,
-  // });
-  // return response.response.result;
+  // console.log({ data });
+  // console.log({ task: data.invoice.lines[0] });
+  const response = await fetchFromFreshbooks({
+    endpoint,
+    accessToken,
+    method: "POST",
+    data,
+  });
+  return response;
 };

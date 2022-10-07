@@ -22,17 +22,20 @@ fetch(`https://api.freshbooks.com/auth/oauth/token`, {
     console.log(data);
   });
 
+let authCode = "";
+
 console.log(`
 curl -L -X POST 'https://api.freshbooks.com/auth/oauth/token' \\
 -F 'grant_type="authorization_code"' \\
 -F 'client_id="${process.env.FRESHBOOKS_CLIENT_ID}"' \\
 -F 'client_secret="${process.env.FRESHBOOKS_CLIENT_SECRET}"' \\
--F 'code=""' \\
+-F 'code="${authCode}"' \\
 -F 'redirect_uri="${process.env.FRESHBOOKS_REDIRECT_URI}"'
 `);
 
 let response = "";
 let authToken = JSON.parse(response);
+let accessToken = authToken.access_token;
 
 fetch("https://api.freshbooks.com/test", {
   method: "GET",

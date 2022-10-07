@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { Invoice } from "src/types/freshbooks/Invoice";
 import { fetchFromFreshbooks } from "./fetchFromFreshbooks";
+import { Invoice } from "./types";
 
 export type Props = {
   accessToken: string;

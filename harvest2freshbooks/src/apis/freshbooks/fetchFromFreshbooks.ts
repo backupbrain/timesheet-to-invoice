@@ -38,7 +38,11 @@ export const fetchFromFreshbooks = async ({
   });
   const responseJson = await response.json();
   if (responseJson.response.errors) {
+    console.log({ errors: responseJson.response.errors });
     throw new Error(responseJson.response.errors[0].message);
   }
-  return responseJson.response;
+  if (responseJson.response) {
+    return responseJson.response;
+  }
+  return responseJson;
 };

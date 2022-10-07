@@ -71,7 +71,6 @@ export const buildClientInvoiceTasks = ({
       }
     }
   }
-  console.log({ invoices });
   for (let taskTime of taskTimes) {
     if (!taskTime.clientId) {
       continue;

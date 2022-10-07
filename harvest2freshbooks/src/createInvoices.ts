@@ -1,6 +1,10 @@
 import { Client } from "@prisma/client";
 import { createInvoice } from "./apis/freshbooks/createInvoice";
 import { getInvoices } from "./apis/freshbooks/getInvoices";
+import {
+  ClientWithAddress,
+  TaskTypeWithTaskAndTaskAssignment,
+} from "./apis/freshbooks/types";
 import { prisma } from "./database/client";
 import { buildClientInvoiceTasks } from "./utils/buildClientInvoiceTasks";
 import { getLastInvoiceDate } from "./utils/getLastInvoiceDate";
@@ -31,7 +35,7 @@ const loadTasks = async ({ accessToken, userName }: Props) => {
       largestInvoiceNumber = invoiceNumber;
     }
   }
-  console.log({ invoice: freshBooksInvoices[0] });
+  // console.log({ invoice: freshBooksInvoices[0] });
   let lastInvoiceDate = getLastInvoiceDate({ invoices: freshBooksInvoices });
   if (!lastInvoiceDate) {
     return;
@@ -67,16 +71,19 @@ const loadTasks = async ({ accessToken, userName }: Props) => {
       const year = parseInt(invoiceStartDate.substring(0, 4));
       const month = parseInt(invoiceStartDate.substring(5, 7));
       const invoiceEndDate = new Date(year, month + 1, 0);
-      await createInvoice({
+      const result = await createInvoice({
+        accessToken,
         invoiceNumber: invoiceNumber.toString().padStart(7, "0"),
-        client,
-        taskTimes,
-        user,
+        client: client as ClientWithAddress,
+        taskTimes: taskTimes as TaskTypeWithTaskAndTaskAssignment[],
         createDate: invoiceEndDate,
       });
+      // console.log({ result });
       invoiceNumber += 1;
       // console.log({ client, invoiceTasks });
+      // break;
     }
+    // break;
   }
 };
 loadTasks({ accessToken, userName });
