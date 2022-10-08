@@ -7,6 +7,7 @@ import {
 } from "./apis/freshbooks/types";
 import { prisma } from "./database/client";
 import { buildClientInvoiceTasks } from "./utils/buildClientInvoiceTasks";
+import { getLastDayOfLastMonth } from "./utils/getLastDayOfLastMonth";
 import { getLastInvoiceDate } from "./utils/getLastInvoiceDate";
 import { getTaskTimesAfterDate } from "./utils/getTaskTimesAfterDate";
 
@@ -51,8 +52,11 @@ const loadTasks = async ({ accessToken, userName }: Props) => {
     }
   });
 
+  // get last day of last month
+  const lastDayOfLastMonth = getLastDayOfLastMonth();
   const taskTimes = await getTaskTimesAfterDate({
     lastInvoiceDate,
+    lastDayOfLastMonth,
     userId: user.id,
   });
   const clientInvoiceTasks = buildClientInvoiceTasks({

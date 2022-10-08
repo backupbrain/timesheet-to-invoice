@@ -3,10 +3,12 @@ import { prisma } from "../database/client";
 
 export type Props = {
   lastInvoiceDate?: Date | undefined;
+  lastDayOfLastMonth: Date;
   userId: string;
 };
 export const getTaskTimesAfterDate = async ({
   lastInvoiceDate,
+  lastDayOfLastMonth,
   userId,
 }: Props) => {
   let lastInvoiceDateString = "0000-00-00";
@@ -18,6 +20,7 @@ export const getTaskTimesAfterDate = async ({
       isRunning: false,
       // isLoggedInFreshbooks: false
       userId,
+      spentDate: { lte: lastDayOfLastMonth.toISOString().slice(0, 10) },
     },
     include: {
       taskAssignment: true,

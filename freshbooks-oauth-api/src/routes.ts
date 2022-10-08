@@ -32,6 +32,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
   console.log(req.params);
   console.log(`Method: ${req.method}`);
   const code = req.params.code;
+  console.log({ code });
   if (code) {
     const url = "https://api.freshbooks.com/auth/oauth/token";
     const headers = {
@@ -54,6 +55,36 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     console.log(responseJson);
   }
   console.log("------------------------");
+
+  const freshbooksOauthUrl =  "https://api.freshbooks.com/auth/oauth/token";
+  const headers = {
+    'Api-Version': 'alpha',
+    'Content-Type': 'application/json'
+  }
+  const oauthPostData = {
+    grant_type: 'authorization_code',
+    code,
+    client_id: process.env.FRESHBOOKS_CLIENT_ID,
+    client_secret: process.env.FRESHBOOKS_CLIENT_SECRET,
+    redirect_uri: process.env.FRESHBOOKS_REDIRECT_URI
+  }
+  const response = await fetch(freshbooksOauthUrl, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(oauthPostData);
+  });
+  try {
+    const responseJson = await response.json();
+    
+  }
+  if (response.status !== 200) {
+    res.send(`Error: ${response.status} ${response.statusText}`);
+  }
+
+
+
+
+
 });
 
 router.post("/api/1.0/oauth", (req: Request, res: Response) => {
