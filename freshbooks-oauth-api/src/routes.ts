@@ -61,7 +61,38 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     const responseJson = JSON.parse(responseBody);
     // const responseJson = await response.json();
     // console.log(responseJson);
-    const output = `<!DOCTYPE html>
+    let output = "":
+    if (responseJson.error) {
+      output = `<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Freshbooks Auth</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+      </head>
+      <body>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h1>Freshbooks Auth</h1>
+              <p>Response from Freshbooks:</p> 
+              <div>Status: ${response.status} ${response.statusText}</div>
+              <div>Response:</div>
+              <div>Error: ${responseJson.error}</div>
+              <div class="alert alert-danger" role="alert">
+                ${responseJson.error_description}
+              </div>
+              <pre>${JSON.stringify(responseJson, null, 2)}</pre>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>`;
+    } else {
+      output = `<!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="utf-8">
@@ -85,6 +116,8 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
         </div>
       </body>
     </html>`;
+
+    }
     res.send(output);
   }
   console.log("------------------------");
