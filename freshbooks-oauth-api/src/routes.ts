@@ -61,7 +61,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     const responseJson = JSON.parse(responseBody);
     // const responseJson = await response.json();
     // console.log(responseJson);
-    let output = "":
+    let output = "";
     if (responseJson.error) {
       output = `<!DOCTYPE html>
     <html lang="en">
@@ -116,7 +116,6 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
         </div>
       </body>
     </html>`;
-
     }
     res.send(output);
   }
