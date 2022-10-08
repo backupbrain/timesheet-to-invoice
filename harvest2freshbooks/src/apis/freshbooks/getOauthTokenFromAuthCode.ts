@@ -14,7 +14,7 @@ export const getOauthTokenFromAuthCode = async ({ authCode }: Props) => {
     code: authCode,
     client_id: process.env.FRESHBOOKS_CLIENT_ID,
     client_secret: process.env.FRESHBOOKS_CLIENT_SECRET,
-    redirect_uri: "https://phonephilosopher.backupbrain.org:9991/api/1.0/oauth",
+    redirect_uri: process.env.FRESHBOOKS_REDIRECT_URI,
   };
   const headers = {
     "User-Agent": "FreshBooks API (nodeJS) 1.0.0",
