@@ -35,8 +35,6 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
   console.log(req.params);
   console.log(`Method: ${req.method}`);
   const code = req.query.code as string;
-  console.log({ code });
-  console.log({ env: process.env });
   if (code) {
     const url = "https://api.freshbooks.com/auth/oauth/token";
     const headers = {
@@ -58,6 +56,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
       body: new URLSearchParams(data).toString(),
     });
     console.log(`status: ${response.status} ${response.statusText}`);
+    console.log({ body: response.body?.toString() });
     const responseJson = await response.json();
     console.log(responseJson);
   }
