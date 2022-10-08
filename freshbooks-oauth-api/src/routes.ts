@@ -1,6 +1,7 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 // import fetch from "node-fetch";
+dotenv.config();
 export const router = express.Router();
 
 router.options("/", (req: Request, res: Response) => {
@@ -35,6 +36,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
   console.log(`Method: ${req.method}`);
   const code = req.query.code;
   console.log({ code });
+  console.log({ process });
   if (code) {
     const url = "https://api.freshbooks.com/auth/oauth/token";
     const headers = {
