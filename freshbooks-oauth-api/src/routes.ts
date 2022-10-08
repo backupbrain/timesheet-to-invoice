@@ -31,7 +31,6 @@ router.head("/api/1.0/oauth", (req: Request, res: Response) => {
 });
 
 router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
-  res.send("OK");
   console.log(req.params);
   console.log(`Method: ${req.method}`);
   const code = req.query.code as string;
@@ -61,6 +60,29 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     console.log({ body: responseBody });
     const responseJson = await response.json();
     console.log(responseJson);
+    const output = `<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Freshbooks Auth</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+      </head>
+      <body>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h1>Freshbooks Auth</h1>
+              <p>Response from Freshbooks:</p> 
+              <pre>${JSON.stringify(responseJson, null, 2)}</pre>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>`;
+    res.send(output);
   }
   console.log("------------------------");
 });
