@@ -75,7 +75,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
               </div>
               <div><strong>Response:</strong></div>
               <table class="table">
-                ${Object.keys(responseJson).forEach((key) => {
+                ${Object.keys(responseJson).map((key) => {
                   return `<tr scope="row"><td>${key}</td><td>${responseJson[key]}</td></tr>`;
                 })}
               </table>
