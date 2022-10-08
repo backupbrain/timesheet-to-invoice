@@ -89,7 +89,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
                 <div class="pt-2">${responseJson.error_description}</div>
               </div>
               <div><strong>JSON:</strong></div>
-              <code class="bg-light p-2"><pre>${JSON.stringify(
+              <code class="bg-light p-2"><pre class="bg-light p-2">${JSON.stringify(
                 responseJson,
                 null,
                 2
