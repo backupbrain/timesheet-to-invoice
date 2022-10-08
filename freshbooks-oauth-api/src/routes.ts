@@ -81,11 +81,16 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
               <p>Response from Freshbooks:</p> 
               <div>Status: ${response.status} ${response.statusText}</div>
               <div>Response:</div>
-              <div>Error: ${responseJson.error}</div>
               <div class="alert alert-danger" role="alert">
-                ${responseJson.error_description}
+                <div><strong>Error:</strong> ${responseJson.error}</div>
+                <div class="pt-2>${responseJson.error_description}</div>
               </div>
-              <pre>${JSON.stringify(responseJson, null, 2)}</pre>
+              <div>JSON:</div>
+              <pre class="bg-light p-2>${JSON.stringify(
+                responseJson,
+                null,
+                2
+              )}</pre>
             </div>
           </div>
         </div>
