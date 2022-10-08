@@ -84,10 +84,16 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
                 ${response.statusText}
               </div>
               <div><strong>Response:</strong></div>
-              <div class="alert alert-danger" role="alert">
-                <div><strong>Error:</strong> ${responseJson.error}</div>
-                <div class="pt-2">${responseJson.error_description}</div>
-              </div>
+              <table class="table">
+                <tr>
+                  <th scope="row">error</th>
+                  <td>${responseJson.error}</td>
+                </tr>
+                <tr>
+                  <th scope="row">error_description</th>
+                  <td>${responseJson.error_description}</td>
+                </tr>
+              </table>
               <div><strong>JSON:</strong></div>
               <pre class="bg-light p-2">${JSON.stringify(
                 responseJson,
@@ -120,25 +126,26 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
                 ${response.status}
                 ${response.statusText}
               </div>
-              <table>
+              <div><strong>Response:</strong></div>
+              <table class="table">
                 <tr>
-                  <th>access_token</th>
+                  <th scope="row">access_token</th>
                   <td>${responseJson.access_token}</td>
                 </tr>
                 <tr>
-                  <th>token_type</th>
+                  <th scope="row">token_type</th>
                   <td>${responseJson.token_type}</td>
                 </tr>
                 <tr>
-                  <th>expires_in</th>
+                  <th scope="row">expires_in</th>
                   <td>${responseJson.expires_in}</td>
                 </tr>
                 <tr>
-                  <th>refresh_token</th>
+                  <th scope="row">refresh_token</th>
                   <td>${responseJson.refresh_token}</td>
                 </tr>
                 <tr>
-                  <th>created_at</th>
+                  <th scope="row">created_at</th>
                   <td>${responseJson.created_at}</td>
                 </tr>
               </table>
