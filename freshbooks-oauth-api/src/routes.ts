@@ -47,6 +47,8 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
       code,
       redirect_uri: process.env.FRESHBOOKS_REDIRECT_URI,
     };
+    console.log({ headers });
+    console.log({ data });
     const response = await fetch(url, {
       method: "POST",
       headers,
