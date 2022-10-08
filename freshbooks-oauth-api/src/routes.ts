@@ -31,7 +31,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
   res.send("OK");
   console.log(req.params);
   console.log(`Method: ${req.method}`);
-  const code = req.params.code;
+  const code = req.query.code;
   console.log({ code });
   if (code) {
     const url = "https://api.freshbooks.com/auth/oauth/token";
