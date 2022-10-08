@@ -34,7 +34,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
   res.send("OK");
   console.log(req.params);
   console.log(`Method: ${req.method}`);
-  const code = req.query.code;
+  const code = req.query.code as string;
   console.log({ code });
   console.log({ env: process.env });
   if (code) {
@@ -55,7 +55,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     const response = await fetch(url, {
       method: "POST",
       headers,
-      body: JSON.stringify(data),
+      body: new URLSearchParams(data).toString(),
     });
     console.log(`status: ${response.status} ${response.statusText}`);
     const responseJson = await response.json();
