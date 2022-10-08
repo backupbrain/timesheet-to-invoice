@@ -31,8 +31,6 @@ router.head("/api/1.0/oauth", (req: Request, res: Response) => {
 });
 
 router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
-  console.log(req.params);
-  console.log(`Method: ${req.method}`);
   const code = req.query.code as string;
   if (code) {
     const url = "https://api.freshbooks.com/auth/oauth/token";
@@ -48,19 +46,13 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
       code,
       redirect_uri: process.env.FRESHBOOKS_REDIRECT_URI!,
     };
-    console.log({ headers });
-    console.log({ data });
     const response = await fetch(url, {
       method: "POST",
       headers,
       body: JSON.stringify(data),
     });
-    console.log(`status: ${response.status} ${response.statusText}`);
     const responseBody = await response.text();
-    console.log({ body: responseBody });
     const responseJson = JSON.parse(responseBody);
-    // const responseJson = await response.json();
-    // console.log(responseJson);
     let output = "";
     if (responseJson.error) {
       output = `<!DOCTYPE html>
@@ -163,5 +155,4 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     }
     res.send(output);
   }
-  console.log("------------------------");
 });
