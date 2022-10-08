@@ -58,7 +58,8 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     console.log(`status: ${response.status} ${response.statusText}`);
     const responseBody = await response.text();
     console.log({ body: responseBody });
-    const responseJson = await response.json();
+    const responseJson = JSON.parse(responseBody);
+    // const responseJson = await response.json();
     // console.log(responseJson);
     const output = `<!DOCTYPE html>
     <html lang="en">
@@ -76,6 +77,8 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
             <div class="col">
               <h1>Freshbooks Auth</h1>
               <p>Response from Freshbooks:</p> 
+              <div>Status: ${response.status} ${response.statusText}</div>
+              <div>Response:</div>
               <pre>${JSON.stringify(responseJson, null, 2)}</pre>
             </div>
           </div>
