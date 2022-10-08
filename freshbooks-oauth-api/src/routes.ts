@@ -45,10 +45,10 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     };
     const data = {
       grant_type: "authorization_code",
-      client_id: process.env.FRESHBOOKS_CLIENT_ID,
-      client_secret: process.env.FRESHBOOKS_CLIENT_SECRET,
+      client_id: process.env.FRESHBOOKS_CLIENT_ID!,
+      client_secret: process.env.FRESHBOOKS_CLIENT_SECRET!,
       code,
-      redirect_uri: process.env.FRESHBOOKS_REDIRECT_URI,
+      redirect_uri: process.env.FRESHBOOKS_REDIRECT_URI!,
     };
     console.log({ headers });
     console.log({ data });
