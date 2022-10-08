@@ -59,7 +59,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     const responseBody = await response.text();
     console.log({ body: responseBody });
     const responseJson = await response.json();
-    console.log(responseJson);
+    // console.log(responseJson);
     const output = `<!DOCTYPE html>
     <html lang="en">
       <head>
