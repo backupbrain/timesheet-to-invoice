@@ -36,14 +36,15 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
   if (code) {
     const url = "https://api.freshbooks.com/auth/oauth/token";
     const headers = {
+      "Api-Version": "alpha",
       "Content-Type": "application/json",
     };
     const data = {
       grant_type: "authorization_code",
-      code,
       client_id: process.env.FRESHBOOKS_CLIENT_ID,
       client_secret: process.env.FRESHBOOKS_CLIENT_SECRET,
-      redirect_uri: "https://phonephilosopher.backupbrain.co/api/1.0/oauth",
+      code,
+      redirect_uri: process.env.FRESHBOOKS_REDIRECT_URI,
     };
     const response = await fetch(url, {
       method: "POST",
