@@ -53,9 +53,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     });
     const responseBody = await response.text();
     const responseJson = JSON.parse(responseBody);
-    let output = "";
-    if (responseJson.error) {
-      output = `<!DOCTYPE html>
+    let output = `<!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="utf-8">
@@ -77,14 +75,9 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
               </div>
               <div><strong>Response:</strong></div>
               <table class="table">
-                <tr>
-                  <th scope="row">error</th>
-                  <td>${responseJson.error}</td>
-                </tr>
-                <tr>
-                  <th scope="row">error_description</th>
-                  <td>${responseJson.error_description}</td>
-                </tr>
+                ${Object.keys(responseJson).forEach((key) => {
+                  return `<tr scope="row"><td>${key}</td><td>${responseJson[key]}</td></tr>`;
+                })}
               </table>
               <div><strong>JSON:</strong></div>
               <pre class="bg-light p-2">${JSON.stringify(
@@ -97,62 +90,6 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
         </div>
       </body>
     </html>`;
-    } else {
-      output = `<!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <title>Freshbooks Auth</title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-      </head>
-      <body>
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              <h1>Freshbooks Auth</h1>
-              <div>
-                <strong>Status:</strong>
-                ${response.status}
-                ${response.statusText}
-              </div>
-              <div><strong>Response:</strong></div>
-              <table class="table">
-                <tr>
-                  <th scope="row">access_token</th>
-                  <td>${responseJson.access_token}</td>
-                </tr>
-                <tr>
-                  <th scope="row">token_type</th>
-                  <td>${responseJson.token_type}</td>
-                </tr>
-                <tr>
-                  <th scope="row">expires_in</th>
-                  <td>${responseJson.expires_in}</td>
-                </tr>
-                <tr>
-                  <th scope="row">refresh_token</th>
-                  <td>${responseJson.refresh_token}</td>
-                </tr>
-                <tr>
-                  <th scope="row">created_at</th>
-                  <td>${responseJson.created_at}</td>
-                </tr>
-              </table>
-              <div><strong>JSON:</strong></div>
-              <pre class="bg-light p-2">${JSON.stringify(
-                responseJson,
-                null,
-                2
-              )}</pre>
-            </div>
-          </div>
-        </div>
-      </body>
-    </html>`;
-    }
     res.send(output);
   }
 });
