@@ -56,7 +56,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
       body: new URLSearchParams(data).toString(),
     });
     console.log(`status: ${response.status} ${response.statusText}`);
-    console.log({ body: response.body?.toString() });
+    console.log({ body: response.text() });
     const responseJson = await response.json();
     console.log(responseJson);
   }
