@@ -115,10 +115,39 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
           <div class="row">
             <div class="col">
               <h1>Freshbooks Auth</h1>
-              <p>Response from Freshbooks:</p> 
-              <div>Status: ${response.status} ${response.statusText}</div>
-              <div>Response:</div>
-              <pre>${JSON.stringify(responseJson, null, 2)}</pre>
+              <div>
+                <strong>Status:</strong>
+                ${response.status}
+                ${response.statusText}
+              </div>
+              <table>
+                <tr>
+                  <th>access_token</th>
+                  <td>${responseJson.access_token}</td>
+                </tr>
+                <tr>
+                  <th>token_type</th>
+                  <td>${responseJson.token_type}</td>
+                </tr>
+                <tr>
+                  <th>expires_in</th>
+                  <td>${responseJson.expires_in}</td>
+                </tr>
+                <tr>
+                  <th>refresh_token</th>
+                  <td>${responseJson.refresh_token}</td>
+                </tr>
+                <tr>
+                  <th>created_at</th>
+                  <td>${responseJson.created_at}</td>
+                </tr>
+              </table>
+              <div><strong>JSON:</strong></div>
+              <pre class="bg-light p-2">${JSON.stringify(
+                responseJson,
+                null,
+                2
+              )}</pre>
             </div>
           </div>
         </div>
