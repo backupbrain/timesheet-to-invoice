@@ -40,6 +40,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     const headers = {
       "Api-Version": "alpha",
       "Content-Type": "application/json",
+      "Cache-Control": "no-cache",
     };
     const data = {
       grant_type: "authorization_code",
@@ -53,7 +54,7 @@ router.get("/api/1.0/oauth", async (req: Request, res: Response) => {
     const response = await fetch(url, {
       method: "POST",
       headers,
-      body: new URLSearchParams(data).toString(),
+      body: JSON.stringify(data),
     });
     console.log(`status: ${response.status} ${response.statusText}`);
     const responseBody = await response.text();
